@@ -1,11 +1,11 @@
 import requests
 
-def top_ten(subreddit):
+def number_of_subscribers(subreddit):
     # Define the User-Agent to avoid being blocked by Reddit
-    headers = {'User-Agent': 'Python/requests:top_ten:v1.0.0 (by /u/yourusername)'}
+    headers = {'User-Agent': 'Python/requests:number_of_subscribers:v1.0.0 (by /u/yourusername)'}
     
-    # Construct the URL for the subreddit's hot posts
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    # Construct the URL for the subreddit's about.json endpoint
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
     
     try:
         # Make the GET request to the Reddit API
@@ -16,21 +16,19 @@ def top_ten(subreddit):
             # Parse the JSON response
             data = response.json()
             
-            # Extract the list of posts
-            posts = data.get('data', {}).get('children', [])
+            # Extract the number of subscribers
+            subscribers = data.get('data', {}).get('subscribers', 0)
             
-            # Print the title of each post
-            for post in posts:
-                print(post['data']['title'])
+            return subscribers
         
-        # If the status code indicates a redirect or other failure, print None
+        # If the status code indicates a redirect or other failure, return 0
         else:
-            print(None)
+            return 0
     
     except requests.RequestException as e:
         # Handle any request exceptions
-        print(None)
+        return 0
 
 # Example usage:
-top_ten('python')  # Replace 'python' with any subreddit you want to check
+print(number_of_subscribers('python'))  # Replace 'python' with any subreddit you want to check
 
